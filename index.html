@@ -4,152 +4,342 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Y'a un ami qui pense à toi 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: Georgia, serif;
-      background-color: #fdf6ec;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Courier Prime', monospace;
+      background-color: #f5f0e8;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 27px,
+          #e0d8c8 27px,
+          #e0d8c8 28px
+        );
       min-height: 100vh;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    header {
+      text-align: center;
+      padding: 30px 20px 10px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    header h1 {
+      font-family: 'Special Elite', cursive;
+      font-size: 1.6em;
+      color: #2c2c2c;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 0.85em;
+      color: #888;
+      font-style: italic;
+    }
+
     .carte {
       background: white;
       max-width: 600px;
       width: 100%;
-      padding: 50px;
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 40px 30px;
+      border-radius: 2px;
+      margin-top: 20px;
+      box-shadow:
+        0 1px 1px rgba(0,0,0,0.1),
+        0 4px 0 #e0d8c8,
+        0 5px 0 #d4cbb8,
+        0 8px 20px rgba(0,0,0,0.15);
+      position: relative;
     }
-    h1 {
-      color: #c0392b;
-      font-size: 1.4em;
-      margin-bottom: 30px;
+
+    /* Trou de perforation style années 2000 */
+    .carte::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: -8px;
+      width: 16px;
+      height: 16px;
+      background: #f5f0e8;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .carte::after {
+      content: '';
+      position: absolute;
+      bottom: 20px;
+      left: -8px;
+      width: 16px;
+      height: 16px;
+      background: #f5f0e8;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* Ligne rouge style cahier */
+    .marge {
+      position: absolute;
+      top: 0;
+      left: 40px;
+      width: 2px;
+      height: 100%;
+      background: rgba(220, 100, 100, 0.3);
+      border-radius: 2px;
+    }
+
+    .contenu {
+      padding-left: 20px;
+    }
+
+    h2.titre-section {
+      font-family: 'Special Elite', cursive;
+      color: #2c2c2c;
+      font-size: 1.2em;
+      margin-bottom: 24px;
       text-align: center;
     }
+
     label {
       display: block;
-      margin-bottom: 6px;
-      color: #555;
-      font-size: 0.95em;
+      margin-bottom: 5px;
+      color: #888;
+      font-size: 0.8em;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
+
     input, textarea {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: Georgia, serif;
+      padding: 10px 0;
+      margin-bottom: 24px;
+      border: none;
+      border-bottom: 1px dashed #ccc;
+      background: transparent;
+      font-family: 'Courier Prime', monospace;
       font-size: 1em;
+      color: #2c2c2c;
+      outline: none;
     }
-    textarea { height: 150px; resize: vertical; }
-    button {
+
+    input:focus, textarea:focus {
+      border-bottom-color: #c0392b;
+    }
+
+    textarea {
+      height: 160px;
+      resize: none;
+      line-height: 1.8;
+    }
+
+    .btn-principal {
       width: 100%;
       padding: 14px;
-      background-color: #c0392b;
+      background-color: #2c2c2c;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 2px;
+      font-family: 'Special Elite', cursive;
       font-size: 1em;
       cursor: pointer;
+      letter-spacing: 1px;
+      margin-top: 10px;
+      transition: background 0.2s;
     }
-    button:hover { background-color: #a93226; }
-    .resultat {
-      display: none;
-      text-align: center;
+    .btn-principal:hover { background-color: #c0392b; }
+
+    /* RÉSULTAT */
+    .resultat { display: none; text-align: center; }
+    .resultat h2 {
+      font-family: 'Special Elite', cursive;
+      color: #2c2c2c;
+      margin-bottom: 10px;
     }
-    .resultat h2 { color: #c0392b; margin-bottom: 10px; }
-    .resultat p { color: #555; margin-bottom: 20px; font-size: 0.95em; }
+    .resultat p { color: #666; margin-bottom: 20px; font-size: 0.9em; }
+
     .lien-box {
-      background: #fdf6ec;
-      border: 1px solid #ddd;
-      border-radius: 6px;
+      background: #fafafa;
+      border: 1px dashed #ccc;
+      border-radius: 2px;
       padding: 12px;
       word-break: break-all;
-      font-size: 0.9em;
+      font-size: 0.8em;
       margin-bottom: 20px;
-      color: #333;
+      color: #555;
+      text-align: left;
     }
+
     .btn-partage {
       display: block;
       width: 100%;
       padding: 14px;
-      border-radius: 6px;
+      border-radius: 2px;
       border: none;
+      font-family: 'Special Elite', cursive;
       font-size: 1em;
       cursor: pointer;
       margin-bottom: 12px;
       color: white;
       text-decoration: none;
       text-align: center;
+      letter-spacing: 1px;
     }
     .btn-whatsapp { background-color: #25D366; }
-    .btn-copier { background-color: #555; }
     .btn-sms { background-color: #007AFF; }
+    .btn-copier { background-color: #555; }
 
-    /* Page lettre */
-    .lettre h2 { color: #c0392b; margin-bottom: 20px; }
-    .lettre .message {
-      font-size: 1.1em;
-      line-height: 1.8;
-      color: #333;
-      margin: 30px 0;
-      white-space: pre-wrap;
+    /* PAGE LETTRE */
+    .page-lettre { display: none; }
+
+    .youtube-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      margin-bottom: 30px;
+      border-radius: 2px;
+      overflow: hidden;
     }
-    .lettre .signature { color: #888; font-style: italic; }
+    .youtube-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .lettre-header {
+      font-family: 'Special Elite', cursive;
+      font-size: 1.3em;
+      color: #c0392b;
+      margin-bottom: 30px;
+    }
+
+    .lettre-message {
+      font-size: 1em;
+      line-height: 2;
+      color: #2c2c2c;
+      white-space: pre-wrap;
+      margin-bottom: 30px;
+    }
+
+    .lettre-signature {
+      font-style: italic;
+      color: #888;
+      font-size: 0.95em;
+      margin-bottom: 40px;
+    }
+
+    .separateur {
+      border: none;
+      border-top: 1px dashed #ccc;
+      margin: 30px 0;
+    }
+
+    .btn-retour {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #2c2c2c;
+      color: white;
+      border: none;
+      border-radius: 2px;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.95em;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+    .btn-retour:hover { background: #c0392b; }
+
+    footer {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 0.75em;
+      color: #aaa;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
 
+<header>
+  <h1>💌 Y'a un ami qui pense à toi</h1>
+  <p>Écris une lettre. Envoie un lien. Fais sourire.</p>
+</header>
+
 <div class="carte">
+  <div class="marge"></div>
+  <div class="contenu">
 
-  <!-- FORMULAIRE -->
-  <div id="formulaire">
-    <h1>Écris une lettre à ton ami 💌</h1>
-    <label>Ton prénom</label>
-    <input type="text" id="expediteur" placeholder="Ex: Marie">
-    <label>Prénom de ton ami</label>
-    <input type="text" id="destinataire" placeholder="Ex: Lucas">
-    <label>Ton message</label>
-    <textarea id="message" placeholder="Écris ce que tu ressens..."></textarea>
-    <button onclick="envoyerLettre()">Créer la lettre 💌</button>
+    <!-- FORMULAIRE -->
+    <div id="formulaire">
+      <h2 class="titre-section">Écrire une lettre</h2>
+      <label>Ton prénom</label>
+      <input type="text" id="expediteur" placeholder="Marie...">
+      <label>Prénom de ton ami</label>
+      <input type="text" id="destinataire" placeholder="Lucas...">
+      <label>Ton message</label>
+      <textarea id="message" placeholder="Écris ce que tu ressens..."></textarea>
+      <button class="btn-principal" onclick="envoyerLettre()">Créer la lettre 💌</button>
+    </div>
+
+    <!-- RÉSULTAT APRÈS ENVOI -->
+    <div class="resultat" id="resultat">
+      <h2>Ta lettre est prête 🎉</h2>
+      <p>Partage ce lien à <strong id="nom-destinataire"></strong> :</p>
+      <div class="lien-box" id="lien-affiche"></div>
+      <a class="btn-partage btn-whatsapp" id="btn-whatsapp" href="#">📱 Envoyer sur WhatsApp</a>
+      <a class="btn-partage btn-sms" id="btn-sms" href="#">💬 Envoyer par SMS</a>
+      <button class="btn-partage btn-copier" onclick="copierLien()">📋 Copier le lien</button>
+    </div>
+
+    <!-- PAGE LETTRE (destinataire) -->
+    <div class="page-lettre" id="page-lettre">
+      <div class="youtube-container">
+        <iframe id="yt-player"
+          src="https://www.youtube.com/embed/TON_ID_YOUTUBE?autoplay=1&mute=0&controls=1"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="lettre-header" id="lettre-destinataire">Chargement...</div>
+      <div class="lettre-message" id="lettre-message"></div>
+      <div class="lettre-signature" id="lettre-expediteur"></div>
+      <hr class="separateur">
+      <a class="btn-retour" href="https://yaunamiquipenseatoi.fr">
+        ✉️ Écrire une lettre à mon tour
+      </a>
+    </div>
+
   </div>
-
-  <!-- RÉSULTAT APRÈS ENVOI -->
-  <div class="resultat" id="resultat">
-    <h2>Ta lettre est prête ! 🎉</h2>
-    <p>Partage ce lien à <strong id="nom-destinataire"></strong> :</p>
-    <div class="lien-box" id="lien-affiche"></div>
-    <a class="btn-partage btn-whatsapp" id="btn-whatsapp" href="#">📱 Envoyer sur WhatsApp</a>
-    <a class="btn-partage btn-sms" id="btn-sms" href="#">💬 Envoyer par SMS</a>
-    <button class="btn-partage btn-copier" onclick="copierLien()">📋 Copier le lien</button>
-  </div>
-
-  <!-- AFFICHAGE DE LA LETTRE -->
-  <div class="lettre" id="lettre" style="display:none">
-    <h2 id="lettre-destinataire">Chargement...</h2>
-    <div class="message" id="lettre-message"></div>
-    <div class="signature" id="lettre-expediteur"></div>
-  </div>
-
 </div>
+
+<footer>
+  Une création avec 🤍 — yaunamiquipenseatoi.fr
+</footer>
 
 <script>
   const SUPABASE_URL = "https://fjcflemqasbdctihxedk.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqY2ZsZW1xYXNiZGN0aWh4ZWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTMyODEsImV4cCI6MjA5NjUyOTI4MX0.phIVXZRgyJGorheBpdUgVn1NOnexOv71jNZCZTSUv6s";
 
-  // --- Détection : est-on en mode lecture de lettre ? ---
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
   if (id) {
-    // Cacher le formulaire, montrer la lettre
     document.getElementById("formulaire").style.display = "none";
-    document.getElementById("lettre").style.display = "block";
+    document.getElementById("page-lettre").style.display = "block";
 
-    fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}`, {
+    fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}&select=*`, {
       headers: {
         "apikey": SUPABASE_KEY,
         "Authorization": `Bearer ${SUPABASE_KEY}`
@@ -168,7 +358,6 @@
     });
   }
 
-  // --- Envoi du formulaire ---
   async function envoyerLettre() {
     const expediteur = document.getElementById("expediteur").value.trim();
     const destinataire = document.getElementById("destinataire").value.trim();
@@ -205,7 +394,6 @@
       document.getElementById("resultat").style.display = "block";
     } else {
       alert("Une erreur s'est produite, réessaie 😕");
-      console.error(data);
     }
   }
 
