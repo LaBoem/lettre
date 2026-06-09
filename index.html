@@ -2,74 +2,182 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Une lettre pour toi 💌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Y'a un ami qui pense à toi 💌</title>
   <style>
-    body { font-family: Georgia, serif; background: #fff5f5; display: flex; justify-content: center; padding: 40px 20px; }
-    .lettre { background: white; max-width: 600px; width: 100%; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    h2 { color: #c0392b; margin-bottom: 10px; }
-    .message { font-size: 1.1em; line-height: 1.8; color: #333; margin: 30px 0; white-space: pre-wrap; }
-    .signature { color: #888; font-style: italic; }
-    .partage { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
-    .partage p { color: #888; margin-bottom: 15px; }
-    .btn { display: inline-block; margin: 5px; padding: 12px 20px; border-radius: 8px; text-decoration: none; color: white; font-family: Arial, sans-serif; font-size: 0.95em; }
-    .btn-wa { background: #25D366; }
-    .btn-sms { background: #555; }
-    .btn-copy { background: #c0392b; cursor: pointer; border: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, serif;
+      background-color: #fdf6ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .carte {
+      background: white;
+      max-width: 600px;
+      width: 100%;
+      padding: 50px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #c0392b;
+      font-size: 1.4em;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #555;
+      font-size: 0.95em;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: Georgia, serif;
+      font-size: 1em;
+    }
+    textarea { height: 150px; resize: vertical; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    button:hover { background-color: #a93226; }
+
+    /* Résultat */
+    .resultat {
+      display: none;
+      text-align: center;
+    }
+    .resultat h2 {
+      color: #c0392b;
+      margin-bottom: 10px;
+    }
+    .resultat p {
+      color: #555;
+      margin-bottom: 20px;
+      font-size: 0.95em;
+    }
+    .lien-box {
+      background: #fdf6ec;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 12px;
+      word-break: break-all;
+      font-size: 0.9em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .btn-partage {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
+      cursor: pointer;
+      margin-bottom: 12px;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-whatsapp { background-color: #25D366; }
+    .btn-copier { background-color: #555; }
+    .btn-sms { background-color: #007AFF; }
   </style>
 </head>
 <body>
-  <div class="lettre">
-    <h2 id="destinataire">Chargement...</h2>
-    <div class="message" id="message"></div>
-    <div class="signature" id="expediteur"></div>
 
-    <div class="partage" id="partage" style="display:none">
-      <p>📲 Envoie ce lien à ton ami :</p>
-      <a id="btn-wa" class="btn btn-wa" target="_blank">WhatsApp</a>
-      <a id="btn-sms" class="btn btn-sms">SMS</a>
-      <button class="btn btn-copy" onclick="copierLien()">Copier le lien</button>
-      <p id="copie-msg" style="color:green;display:none">✅ Lien copié !</p>
-    </div>
+<div class="carte">
+
+  <!-- FORMULAIRE -->
+  <div id="formulaire">
+    <h1>Écris une lettre à ton ami 💌</h1>
+    <label>Ton prénom</label>
+    <input type="text" id="expediteur" placeholder="Ex: Marie">
+    <label>Prénom de ton ami</label>
+    <input type="text" id="destinataire" placeholder="Ex: Lucas">
+    <label>Ton message</label>
+    <textarea id="message" placeholder="Écris ce que tu ressens..."></textarea>
+    <button onclick="envoyerLettre()">Créer la lettre 💌</button>
   </div>
 
-  <script>
-    const SUPABASE_URL = "https://fjcflemqasbdctihxedk.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqY2ZsZW1xYXNiZGN0aWh4ZWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTMyODEsImV4cCI6MjA5NjUyOTI4MX0.phIVXZRgyJGorheBpdUgVn1NOnexOv71jNZCZTSUv6s";
+  <!-- RÉSULTAT -->
+  <div class="resultat" id="resultat">
+    <h2>Ta lettre est prête ! 🎉</h2>
+    <p>Partage ce lien à <strong id="nom-destinataire"></strong> :</p>
+    <div class="lien-box" id="lien-affiche"></div>
+    <a class="btn-partage btn-whatsapp" id="btn-whatsapp" href="#">📱 Envoyer sur WhatsApp</a>
+    <a class="btn-partage btn-sms" id="btn-sms" href="#">💬 Envoyer par SMS</a>
+    <button class="btn-partage btn-copier" onclick="copierLien()">📋 Copier le lien</button>
+  </div>
 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-    const lien = window.location.href;
+</div>
 
-    if (id) {
-      fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}&select=*`, {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${SUPABASE_KEY}`
-        }
-      })
-      .then(r => r.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const l = data[0];
-          document.getElementById("destinataire").textContent = "Pour " + l.destinataire + " 💌";
-          document.getElementById("message").textContent = l.message;
-          document.getElementById("expediteur").textContent = "— " + l.expediteur;
+<script>
+  const SUPABASE_URL = "https://fjcflemqasbdctihxedk.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqY2ZsZW1xYXNiZGN0aWh4ZWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTMyODEsImV4cCI6MjA5NjUyOTI4MX0.phIVXZRgyJGorheBpdUgVn1NOnexOv71jNZCZTSUv6s";
 
-          const texte = encodeURIComponent("J'ai écrit une lettre pour toi 💌 : " + lien);
-          document.getElementById("btn-wa").href = "https://wa.me/?text=" + texte;
-          document.getElementById("btn-sms").href = "sms:?body=" + texte;
-          document.getElementById("partage").style.display = "block";
-        } else {
-          document.getElementById("destinataire").textContent = "Lettre introuvable 😕";
-        }
-      });
+  async function envoyerLettre() {
+    const expediteur = document.getElementById("expediteur").value.trim();
+    const destinataire = document.getElementById("destinataire").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    if (!expediteur || !destinataire || !message) {
+      alert("Merci de remplir tous les champs 😊");
+      return;
     }
 
-    function copierLien() {
-      navigator.clipboard.writeText(lien).then(() => {
-        document.getElementById("copie-msg").style.display = "block";
-      });
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/lettres`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"
+      },
+      body: JSON.stringify({ expediteur, destinataire, message })
+    });
+
+    const data = await response.json();
+
+    if (data && data[0] && data[0].id) {
+      const id = data[0].id;
+      const lien = `https://yaunamiquipenseatoi.fr/?id=${id}`;
+
+      document.getElementById("nom-destinataire").textContent = destinataire;
+      document.getElementById("lien-affiche").textContent = lien;
+      document.getElementById("btn-whatsapp").href = `https://wa.me/?text=${encodeURIComponent("Y'a un ami qui pense à toi 💌 " + lien)}`;
+      document.getElementById("btn-sms").href = `sms:?body=${encodeURIComponent("Y'a un ami qui pense à toi 💌 " + lien)}`;
+
+      document.getElementById("formulaire").style.display = "none";
+      document.getElementById("resultat").style.display = "block";
+    } else {
+      alert("Une erreur s'est produite, réessaie 😕");
+      console.error(data);
     }
-  </script>
+  }
+
+  function copierLien() {
+    const lien = document.getElementById("lien-affiche").textContent;
+    navigator.clipboard.writeText(lien).then(() => {
+      alert("Lien copié ! 📋");
+    });
+  }
+</script>
+
 </body>
 </html>
