@@ -49,12 +49,14 @@
     const id = params.get("id");
 
     if (id) {
-      fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}`, {
+      fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}&select=*`, {
         headers: {
           "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${SUPABASE_KEY}`
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Accept-Profile": "public"
         }
       })
+
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
