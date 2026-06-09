@@ -56,21 +56,12 @@
       cursor: pointer;
     }
     button:hover { background-color: #a93226; }
-
-    /* Résultat */
     .resultat {
       display: none;
       text-align: center;
     }
-    .resultat h2 {
-      color: #c0392b;
-      margin-bottom: 10px;
-    }
-    .resultat p {
-      color: #555;
-      margin-bottom: 20px;
-      font-size: 0.95em;
-    }
+    .resultat h2 { color: #c0392b; margin-bottom: 10px; }
+    .resultat p { color: #555; margin-bottom: 20px; font-size: 0.95em; }
     .lien-box {
       background: #fdf6ec;
       border: 1px solid #ddd;
@@ -97,6 +88,17 @@
     .btn-whatsapp { background-color: #25D366; }
     .btn-copier { background-color: #555; }
     .btn-sms { background-color: #007AFF; }
+
+    /* Page lettre */
+    .lettre h2 { color: #c0392b; margin-bottom: 20px; }
+    .lettre .message {
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #333;
+      margin: 30px 0;
+      white-space: pre-wrap;
+    }
+    .lettre .signature { color: #888; font-style: italic; }
   </style>
 </head>
 <body>
@@ -115,7 +117,7 @@
     <button onclick="envoyerLettre()">Créer la lettre 💌</button>
   </div>
 
-  <!-- RÉSULTAT -->
+  <!-- RÉSULTAT APRÈS ENVOI -->
   <div class="resultat" id="resultat">
     <h2>Ta lettre est prête ! 🎉</h2>
     <p>Partage ce lien à <strong id="nom-destinataire"></strong> :</p>
@@ -125,12 +127,48 @@
     <button class="btn-partage btn-copier" onclick="copierLien()">📋 Copier le lien</button>
   </div>
 
+  <!-- AFFICHAGE DE LA LETTRE -->
+  <div class="lettre" id="lettre" style="display:none">
+    <h2 id="lettre-destinataire">Chargement...</h2>
+    <div class="message" id="lettre-message"></div>
+    <div class="signature" id="lettre-expediteur"></div>
+  </div>
+
 </div>
 
 <script>
   const SUPABASE_URL = "https://fjcflemqasbdctihxedk.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqY2ZsZW1xYXNiZGN0aWh4ZWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTMyODEsImV4cCI6MjA5NjUyOTI4MX0.phIVXZRgyJGorheBpdUgVn1NOnexOv71jNZCZTSUv6s";
 
+  // --- Détection : est-on en mode lecture de lettre ? ---
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (id) {
+    // Cacher le formulaire, montrer la lettre
+    document.getElementById("formulaire").style.display = "none";
+    document.getElementById("lettre").style.display = "block";
+
+    fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}`, {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        const l = data[0];
+        document.getElementById("lettre-destinataire").textContent = `Pour ${l.destinataire} 💌`;
+        document.getElementById("lettre-message").textContent = l.message;
+        document.getElementById("lettre-expediteur").textContent = `— ${l.expediteur}`;
+      } else {
+        document.getElementById("lettre-destinataire").textContent = "Lettre introuvable 😕";
+      }
+    });
+  }
+
+  // --- Envoi du formulaire ---
   async function envoyerLettre() {
     const expediteur = document.getElementById("expediteur").value.trim();
     const destinataire = document.getElementById("destinataire").value.trim();
@@ -173,9 +211,7 @@
 
   function copierLien() {
     const lien = document.getElementById("lien-affiche").textContent;
-    navigator.clipboard.writeText(lien).then(() => {
-      alert("Lien copié ! 📋");
-    });
+    navigator.clipboard.writeText(lien).then(() => alert("Lien copié ! 📋"));
   }
 </script>
 
