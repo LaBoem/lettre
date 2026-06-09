@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Une lettre pour toi</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background-color: #fdf6ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .lettre {
+      background: white;
+      max-width: 600px;
+      width: 100%;
+      padding: 50px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #c0392b;
+      margin-bottom: 10px;
+    }
+    .message {
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #333;
+      margin: 30px 0;
+      white-space: pre-wrap;
+    }
+    .signature {
+      color: #888;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="lettre">
+    <h2 id="destinataire">Chargement...</h2>
+    <div class="message" id="message"></div>
+    <div class="signature" id="expediteur"></div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://fjcflemqasbdctihxedk.supabase.co/rest/v1/";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqY2ZsZW1xYXNiZGN0aWh4ZWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTMyODEsImV4cCI6MjA5NjUyOTI4MX0.phIVXZRgyJGorheBpdUgVn1NOnexOv71jNZCZTSUv6s";
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (id) {
+      fetch(`${SUPABASE_URL}/rest/v1/lettres?id=eq.${id}`, {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          const lettre = data[0];
+          document.getElementById("destinataire").textContent = `Pour ${lettre.destinataire} 💌`;
+          document.getElementById("message").textContent = lettre.message;
+          document.getElementById("expediteur").textContent = `— ${lettre.expediteur}`;
+        } else {
+          document.getElementById("destinataire").textContent = "Lettre introuvable 😕";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
