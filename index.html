@@ -11,6 +11,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>Y a un ami qui pense à toi 💌</title>
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -141,6 +142,20 @@
       line-height: 1.8;
     }
 
+    /* APERÇU COULEUR sur la carte formulaire */
+    #apercu-carte {
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+      border: 1px dashed #ccc;
+    }
+    #apercu-carte p {
+      font-size: 0.85em;
+      font-style: italic;
+      transition: color 0.3s;
+    }
+
     /* CHOIX COULEUR */
     .couleur-label {
       display: block;
@@ -255,45 +270,17 @@
       margin: 30px 0;
     }
 
-    /* STREAMING */
-    .streaming-titre {
-      font-family: 'Special Elite', cursive;
-      font-size: 0.85em;
-      color: #aaa;
-      text-align: center;
-      letter-spacing: 1px;
-      margin-bottom: 14px;
-      text-transform: uppercase;
+    /* YOUTUBE */
+    .youtube-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 16px;
     }
-
-    .streaming-icons {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .streaming-icons a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #f5f0e8;
-      transition: transform 0.2s, background 0.2s;
-      text-decoration: none;
-    }
-
-    .streaming-icons a:hover { transform: scale(1.15); background: #e0d8c8; }
-    .streaming-icons img { width: 24px; height: 24px; object-fit: contain; }
 
     .youtube-container {
       position: relative;
       width: 100%;
       padding-bottom: 56.25%;
-      margin-top: 10px;
       border-radius: 2px;
       overflow: hidden;
     }
@@ -302,6 +289,63 @@
       top: 0; left: 0;
       width: 100%; height: 100%;
       border: none;
+    }
+
+    /* BOUTON MUTE */
+    #btn-mute {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px auto 0;
+      background: #2c2c2c;
+      color: white;
+      border: none;
+      border-radius: 2px;
+      padding: 10px 18px;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.9em;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    #btn-mute:hover { background: #c0392b; }
+
+    /* STREAMING — sous la vidéo */
+    .streaming-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .streaming-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #f5f0e8;
+      transition: transform 0.2s, background 0.2s;
+      text-decoration: none;
+      font-size: 1.4em;
+    }
+
+    .streaming-icons a:hover { transform: scale(1.15); background: #e0d8c8; }
+
+    .fa-spotify { color: #1DB954; }
+    .fa-apple { color: #fc3c44; }
+    .fa-youtube { color: #FF0000; }
+    .fa-soundcloud { color: #FF5500; }
+    /* Deezer n'a pas d'icône FA officielle, on utilise une lettre stylée */
+    .deezer-icon {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75em;
+      color: #A238FF;
+      font-style: normal;
+      line-height: 1;
     }
 
     .btn-retour {
@@ -378,7 +422,7 @@
   <p>Écris une lettre. Donne un sourire.</p>
 </header>
 
-<div class="carte">
+<div class="carte" id="carte-principale">
   <div class="marge"></div>
   <div class="contenu">
 
@@ -404,6 +448,11 @@
         <div class="couleur-option" style="background:#2c2c2c;" data-bg="#2c2c2c" data-text="#f5f0e8" onclick="choisirCouleur(this)"></div>
       </div>
 
+      <!-- APERÇU -->
+      <div id="apercu-carte">
+        <p id="apercu-texte">Aperçu de la couleur de ta lettre ✨</p>
+      </div>
+
       <button class="btn-principal" onclick="envoyerLettre()">Créer la lettre 💌</button>
     </div>
 
@@ -425,33 +474,37 @@
 
       <hr class="separateur">
 
-      <!-- STREAMING -->
-      <p class="streaming-titre">Écouter le morceau 🎵</p>
-      <div class="streaming-icons">
-        <a href="https://open.spotify.com/intl-fr/album/202ud882rLCSj2shDp2cwo?si=Q57QHOe2SM-Bt4RIGXOnKA" target="_blank" title="Spotify">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/168px-Spotify_logo_without_text.svg.png" alt="Spotify">
-        </a>
-        <a href="https://music.apple.com/fr/album/premier-fragment-feat-laboem-single/6773661981" target="_blank" title="Apple Music">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/2048px-Apple_Music_icon.svg.png" alt="Apple Music">
-        </a>
-        <a href="https://link.deezer.com/s/33xjqFefqOy0k8WLxyR2a" target="_blank" title="Deezer">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Deezer_logo.svg/2560px-2023_Deezer_logo.svg.png" alt="Deezer">
-        </a>
-        <a href="https://www.youtube.com/watch?v=B7oyWw9qV0A&list=PLFznAm1Tt0iQFI5pb84dymFKLL_6A6IRj" target="_blank" title="YouTube">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
-        </a>
-        <a href="https://on.soundcloud.com/fauMezvF5LfvRMxR7B" target="_blank" title="SoundCloud">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Soundcloud_logo.svg/2560px-Soundcloud_logo.svg.png" alt="SoundCloud">
-        </a>
+      <!-- YOUTUBE -->
+      <div class="youtube-wrapper">
+        <div class="youtube-container">
+          <iframe id="yt-frame"
+            src="https://www.youtube.com/embed/B7oyWw9qV0A?autoplay=1&mute=1&controls=1&enablejsapi=1"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <button id="btn-mute" onclick="toggleMute()">
+          <i class="fa-solid fa-volume-xmark" id="mute-icon"></i> Son coupé — Activer le son
+        </button>
       </div>
 
-      <!-- YOUTUBE EN DESSOUS -->
-      <div class="youtube-container">
-        <iframe
-          src="https://www.youtube.com/embed/B7oyWw9qV0A?autoplay=1&mute=0&controls=1"
-          allow="autoplay; encrypted-media"
-          allowfullscreen>
-        </iframe>
+      <!-- STREAMING — sous la vidéo -->
+      <div class="streaming-icons">
+        <a href="https://open.spotify.com/intl-fr/album/202ud882rLCSj2shDp2cwo?si=Q57QHOe2SM-Bt4RIGXOnKA" target="_blank" title="Spotify">
+          <i class="fa-brands fa-spotify fa-spotify"></i>
+        </a>
+        <a href="https://music.apple.com/fr/album/premier-fragment-feat-laboem-single/6773661981" target="_blank" title="Apple Music">
+          <i class="fa-brands fa-apple fa-apple"></i>
+        </a>
+        <a href="https://link.deezer.com/s/33xjqFefqOy0k8WLxyR2a" target="_blank" title="Deezer">
+          <span class="deezer-icon">Dz</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=B7oyWw9qV0A" target="_blank" title="YouTube">
+          <i class="fa-brands fa-youtube fa-youtube"></i>
+        </a>
+        <a href="https://on.soundcloud.com/fauMezvF5LfvRMxR7B" target="_blank" title="SoundCloud">
+          <i class="fa-brands fa-soundcloud fa-soundcloud"></i>
+        </a>
       </div>
 
       <hr class="separateur">
@@ -476,7 +529,6 @@
   if (localStorage.getItem("cookies_accepted")) {
     document.getElementById("cookie-banner").style.display = "none";
   }
-
   function accepterCookies() {
     localStorage.setItem("cookies_accepted", "true");
     document.getElementById("cookie-banner").style.display = "none";
@@ -491,6 +543,32 @@
     el.classList.add("selected");
     couleurBg = el.dataset.bg;
     couleurText = el.dataset.text;
+
+    // Aperçu en temps réel
+    const apercu = document.getElementById("apercu-carte");
+    const apercuTexte = document.getElementById("apercu-texte");
+    apercu.style.background = couleurBg;
+    apercuTexte.style.color = couleurText;
+  }
+
+  // MUTE
+  let isMuted = true;
+  function toggleMute() {
+    const frame = document.getElementById("yt-frame");
+    const icon = document.getElementById("mute-icon");
+    const btn = document.getElementById("btn-mute");
+
+    if (isMuted) {
+      frame.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+      icon.className = "fa-solid fa-volume-high";
+      btn.innerHTML = '<i class="fa-solid fa-volume-high" id="mute-icon"></i> Son activé — Couper le son';
+      isMuted = false;
+    } else {
+      frame.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+      icon.className = "fa-solid fa-volume-xmark";
+      btn.innerHTML = '<i class="fa-solid fa-volume-xmark" id="mute-icon"></i> Son coupé — Activer le son';
+      isMuted = true;
+    }
   }
 
   // CHARGEMENT LETTRE
@@ -515,9 +593,8 @@
         document.getElementById("lettre-message").textContent = l.message;
         document.getElementById("lettre-expediteur").textContent = `— ${l.expediteur}`;
 
-        // Appliquer la couleur si sauvegardée
         if (l.couleur_bg) {
-          document.querySelector(".carte").style.background = l.couleur_bg;
+          document.getElementById("carte-principale").style.background = l.couleur_bg;
           document.getElementById("lettre-destinataire").style.color = l.couleur_text;
           document.getElementById("lettre-message").style.color = l.couleur_text;
         }
