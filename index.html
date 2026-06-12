@@ -68,7 +68,6 @@
       position: relative;
     }
 
-    /* Trou de perforation style années 2000 */
     .carte::before {
       content: '';
       position: absolute;
@@ -92,7 +91,6 @@
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
     }
 
-    /* Ligne rouge style cahier */
     .marge {
       position: absolute;
       top: 0;
@@ -103,9 +101,7 @@
       border-radius: 2px;
     }
 
-    .contenu {
-      padding-left: 20px;
-    }
+    .contenu { padding-left: 20px; }
 
     h2.titre-section {
       font-family: 'Special Elite', cursive;
@@ -137,15 +133,42 @@
       outline: none;
     }
 
-    input:focus, textarea:focus {
-      border-bottom-color: #c0392b;
-    }
+    input:focus, textarea:focus { border-bottom-color: #c0392b; }
 
     textarea {
       height: 160px;
       resize: none;
       line-height: 1.8;
     }
+
+    /* CHOIX COULEUR */
+    .couleur-label {
+      display: block;
+      margin-bottom: 10px;
+      color: #888;
+      font-size: 0.8em;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .couleurs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .couleur-option {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border 0.2s, transform 0.2s;
+    }
+
+    .couleur-option:hover { transform: scale(1.1); }
+    .couleur-option.selected { border-color: #2c2c2c; }
 
     .btn-principal {
       width: 100%;
@@ -206,32 +229,15 @@
     /* PAGE LETTRE */
     .page-lettre { display: none; }
 
-    .youtube-container {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      margin-bottom: 30px;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .youtube-container iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: none;
-    }
-
     .lettre-header {
       font-family: 'Special Elite', cursive;
       font-size: 1.3em;
-      color: #c0392b;
       margin-bottom: 30px;
     }
 
     .lettre-message {
       font-size: 1em;
       line-height: 2;
-      color: #2c2c2c;
       white-space: pre-wrap;
       margin-bottom: 30px;
     }
@@ -249,6 +255,55 @@
       margin: 30px 0;
     }
 
+    /* STREAMING */
+    .streaming-titre {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85em;
+      color: #aaa;
+      text-align: center;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .streaming-icons {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .streaming-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #f5f0e8;
+      transition: transform 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+
+    .streaming-icons a:hover { transform: scale(1.15); background: #e0d8c8; }
+    .streaming-icons img { width: 24px; height: 24px; object-fit: contain; }
+
+    .youtube-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      margin-top: 10px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .youtube-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
     .btn-retour {
       display: block;
       width: 100%;
@@ -263,6 +318,7 @@
       text-align: center;
       letter-spacing: 1px;
       text-decoration: none;
+      margin-top: 10px;
     }
     .btn-retour:hover { background: #c0392b; }
 
@@ -274,9 +330,48 @@
       color: #aaa;
       font-style: italic;
     }
+
+    /* BANNIÈRE COOKIES */
+    #cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #2c2c2c;
+      color: #eee;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      z-index: 9999;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.82em;
+      flex-wrap: wrap;
+    }
+
+    #cookie-banner p { margin: 0; line-height: 1.5; flex: 1; min-width: 200px; }
+
+    #cookie-banner button {
+      background: #c0392b;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 2px;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.9em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
+
+<!-- BANNIÈRE COOKIES -->
+<div id="cookie-banner">
+  <p>🍪 Ce site utilise des cookies pour sauvegarder les lettres. En continuant, vous acceptez leur utilisation.</p>
+  <button onclick="accepterCookies()">J'accepte</button>
+</div>
 
 <header>
   <h1>💌 Y a un ami qui pense à toi</h1>
@@ -296,6 +391,19 @@
       <input type="text" id="destinataire" placeholder="Buzz...">
       <label>Ton message</label>
       <textarea id="message" placeholder="Je voulais te dire que..."></textarea>
+
+      <!-- CHOIX COULEUR -->
+      <span class="couleur-label">Couleur de la lettre</span>
+      <div class="couleurs" id="couleurs">
+        <div class="couleur-option selected" style="background:#ffffff;" data-bg="#ffffff" data-text="#2c2c2c" onclick="choisirCouleur(this)"></div>
+        <div class="couleur-option" style="background:#fce4ec;" data-bg="#fce4ec" data-text="#880e4f" onclick="choisirCouleur(this)"></div>
+        <div class="couleur-option" style="background:#e8f5e9;" data-bg="#e8f5e9" data-text="#1b5e20" onclick="choisirCouleur(this)"></div>
+        <div class="couleur-option" style="background:#e3f2fd;" data-bg="#e3f2fd" data-text="#0d47a1" onclick="choisirCouleur(this)"></div>
+        <div class="couleur-option" style="background:#fff9c4;" data-bg="#fff9c4" data-text="#795548" onclick="choisirCouleur(this)"></div>
+        <div class="couleur-option" style="background:#f3e5f5;" data-bg="#f3e5f5" data-text="#4a148c" onclick="choisirCouleur(this)"></div>
+        <div class="couleur-option" style="background:#2c2c2c;" data-bg="#2c2c2c" data-text="#f5f0e8" onclick="choisirCouleur(this)"></div>
+      </div>
+
       <button class="btn-principal" onclick="envoyerLettre()">Créer la lettre 💌</button>
     </div>
 
@@ -311,17 +419,43 @@
 
     <!-- PAGE LETTRE (destinataire) -->
     <div class="page-lettre" id="page-lettre">
+      <div class="lettre-header" id="lettre-destinataire">Chargement...</div>
+      <div class="lettre-message" id="lettre-message"></div>
+      <div class="lettre-signature" id="lettre-expediteur"></div>
+
+      <hr class="separateur">
+
+      <!-- STREAMING -->
+      <p class="streaming-titre">Écouter le morceau 🎵</p>
+      <div class="streaming-icons">
+        <a href="LIEN_SPOTIFY" target="_blank" title="Spotify">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/168px-Spotify_logo_without_text.svg.png" alt="Spotify">
+        </a>
+        <a href="LIEN_APPLE_MUSIC" target="_blank" title="Apple Music">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/2048px-Apple_Music_icon.svg.png" alt="Apple Music">
+        </a>
+        <a href="LIEN_DEEZER" target="_blank" title="Deezer">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Deezer_logo.svg/2560px-2023_Deezer_logo.svg.png" alt="Deezer">
+        </a>
+        <a href="LIEN_YOUTUBE" target="_blank" title="YouTube">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
+        </a>
+        <a href="LIEN_SOUNDCLOUD" target="_blank" title="SoundCloud">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Soundcloud_logo.svg/2560px-Soundcloud_logo.svg.png" alt="SoundCloud">
+        </a>
+      </div>
+
+      <!-- YOUTUBE EN DESSOUS -->
       <div class="youtube-container">
-        <iframe id="yt-player"
+        <iframe
           src="https://www.youtube.com/embed/B7oyWw9qV0A?autoplay=1&mute=0&controls=1"
           allow="autoplay; encrypted-media"
           allowfullscreen>
         </iframe>
       </div>
-      <div class="lettre-header" id="lettre-destinataire">Chargement...</div>
-      <div class="lettre-message" id="lettre-message"></div>
-      <div class="lettre-signature" id="lettre-expediteur"></div>
+
       <hr class="separateur">
+
       <a class="btn-retour" href="https://yaunamiquipenseatoi.fr">
         ✉️ Écrire une lettre à mon tour
       </a>
@@ -338,6 +472,28 @@
   const SUPABASE_URL = "https://fjcflemqasbdctihxedk.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqY2ZsZW1xYXNiZGN0aWh4ZWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTMyODEsImV4cCI6MjA5NjUyOTI4MX0.phIVXZRgyJGorheBpdUgVn1NOnexOv71jNZCZTSUv6s";
 
+  // COOKIES
+  if (localStorage.getItem("cookies_accepted")) {
+    document.getElementById("cookie-banner").style.display = "none";
+  }
+
+  function accepterCookies() {
+    localStorage.setItem("cookies_accepted", "true");
+    document.getElementById("cookie-banner").style.display = "none";
+  }
+
+  // COULEUR
+  let couleurBg = "#ffffff";
+  let couleurText = "#2c2c2c";
+
+  function choisirCouleur(el) {
+    document.querySelectorAll(".couleur-option").forEach(o => o.classList.remove("selected"));
+    el.classList.add("selected");
+    couleurBg = el.dataset.bg;
+    couleurText = el.dataset.text;
+  }
+
+  // CHARGEMENT LETTRE
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
@@ -358,12 +514,20 @@
         document.getElementById("lettre-destinataire").textContent = `Pour ${l.destinataire} 💌`;
         document.getElementById("lettre-message").textContent = l.message;
         document.getElementById("lettre-expediteur").textContent = `— ${l.expediteur}`;
+
+        // Appliquer la couleur si sauvegardée
+        if (l.couleur_bg) {
+          document.querySelector(".carte").style.background = l.couleur_bg;
+          document.getElementById("lettre-destinataire").style.color = l.couleur_text;
+          document.getElementById("lettre-message").style.color = l.couleur_text;
+        }
       } else {
         document.getElementById("lettre-destinataire").textContent = "Lettre introuvable 😕";
       }
     });
   }
 
+  // ENVOI LETTRE
   async function envoyerLettre() {
     const expediteur = document.getElementById("expediteur").value.trim();
     const destinataire = document.getElementById("destinataire").value.trim();
@@ -382,7 +546,7 @@
         "Content-Type": "application/json",
         "Prefer": "return=representation"
       },
-      body: JSON.stringify({ expediteur, destinataire, message })
+      body: JSON.stringify({ expediteur, destinataire, message, couleur_bg: couleurBg, couleur_text: couleurText })
     });
 
     const data = await response.json();
